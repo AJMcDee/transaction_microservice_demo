@@ -12,10 +12,10 @@ class Transaction(
     val id: Int? = 1,
 
     @Column(name = "from_iban")
-    val fromIban: String? = "",
+    val fromIban: String? = null,
 
     @Column(name = "to_iban")
-    var toIban: String? = "",
+    var toIban: String? = null,
 
     @Column(name = "date")
     val date: String = "",

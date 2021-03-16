@@ -39,8 +39,12 @@ class TransactionsService {
 
     }
 
+    private fun transactionInvalid(newTransaction: Transaction) : Boolean {
+        return (newTransaction.type == "transfer" && newTransaction.toIban == null)
+    }
 
     fun addTransaction(newTransaction: Transaction): Transaction {
+        if (transactionInvalid(newTransaction)) throw TransferToIBANNotFoundException()
         return repository.save(newTransaction)
     }
 

@@ -8,4 +8,9 @@ class TransactionNotFoundException: Exception() {
 
 }
 
+@ResponseStatus(value=HttpStatus.BAD_REQUEST, reason="Transfers must contain a TO IBAN")
+class TransferToIBANNotFoundException: Exception() {
+
+}
+
 
