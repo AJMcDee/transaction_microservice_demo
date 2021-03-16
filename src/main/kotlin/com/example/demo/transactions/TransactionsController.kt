@@ -9,7 +9,7 @@ import com.example.demo.repository.TransactionRepository
 
 
 @SpringBootApplication
-@CrossOrigin(origins = arrayOf("http://localhost:8080"))
+@CrossOrigin(origins = arrayOf("http://localhost:8081"))
 @RestController("/")
 class TransactionsController (private val transactionsService: TransactionsService){
 
@@ -17,7 +17,7 @@ class TransactionsController (private val transactionsService: TransactionsServi
     lateinit var repository: TransactionRepository
 
     @GetMapping("/transactions")
-    fun sendAccounts(): MutableList<Transaction> {
+    fun getAllTransactions(): MutableList<Transaction> {
         return transactionsService.getAllTransactions();
     }
 
@@ -27,25 +27,13 @@ class TransactionsController (private val transactionsService: TransactionsServi
     }
 
     @PostMapping(path = ["/transactions"])
-    fun addMember(@RequestBody newTransaction: Transaction): Transaction {
+    fun addTransaction(@RequestBody newTransaction: Transaction): Transaction {
         return transactionsService.addTransaction(newTransaction);
     }
-//
-//    @PostMapping(path = ["/authenticate"])
-//    fun authenticate(@RequestBody loginAttempt: LoginAttempt): String {
-//        return transactionsService.authenticate(loginAttempt)
-//    }
-//
-//    @DeleteMapping("/account/{token}")
-//    fun deleteAccount(@PathVariable token: String): MutableList<Account> {
-//        return transactionsService.deleteAccount(token)
-//    }
-//
-//
-//    @PatchMapping(path = ["/account"])
-//    fun updateBalance(@RequestBody updateRequest: UpdateRequest): Account {
-//        return transactionsService.updateBalance(updateRequest)
-//
-//    }
+
+    @GetMapping("/transaction/{id}")
+    fun getTransactionById(@PathVariable id: Int): Transaction {
+        return transactionsService.getTransactionById(id)
+    }
 
 }

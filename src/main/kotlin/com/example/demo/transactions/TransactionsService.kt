@@ -41,51 +41,14 @@ class TransactionsService {
 
 
     fun addTransaction(newTransaction: Transaction): Transaction {
-        if (!repository.existsTransactionById(newTransaction.id!!)) {
-            repository.save(newTransaction)
-        }
-        return repository.findTransactionById(newTransaction.id!!)
-
+        return repository.save(newTransaction)
     }
-//
-//    fun authenticate(loginAttempt : LoginAttempt): String {
-//        val iban = loginAttempt.iban
-//        val password = loginAttempt.password
-//        if (!repository.existsByIbanAndPassword(iban, password)) throw IncorrectCredentialsException()
-//
-//        val currentAccount = repository.findByIbanAndPassword(iban, password)
-//            val token = getNewToken()
-//            currentAccount.token = token;
-//            repository.save(currentAccount);
-//            return token
-//    }
-//
-//
-//    fun verifyAccountAccess(token: String) : Account {
-//        if (!repository.existsByToken(token)) throw IncorrectCredentialsException()
-//        return repository.findByToken(token)
-//    }
-//
-//    fun deleteAccount(token: String) : MutableList<Account> {
-//        repository.delete(verifyAccountAccess(token))
-//        return getAllTransactions()
-//    }
-//
-//    fun updateBalance(updateRequest: UpdateRequest) : Account {
-//        val token = updateRequest.token
-//        var currentAccount = verifyAccountAccess(token)
-//        currentAccount.updateBalance(updateRequest.amount,updateRequest.operation)
-//        repository.save(currentAccount)
-//        return currentAccount
-//    }
-//
-//    private fun getNewToken() : String {
-//        var token = ""
-//        val randomCollection = "r29afKw02Pmlgp9201Odfqzxru"
-//        for (i in 1..25) {
-//            token += randomCollection[floor(Math.random()*25).toInt()]
-//        }
-//        return token
-//    }
+
+    fun getTransactionById(id: Int) : Transaction {
+        if (!repository.existsTransactionById(id)) {
+            throw TransactionNotFoundException()
+        }
+        return repository.findTransactionById(id)
+    }
 
 }
