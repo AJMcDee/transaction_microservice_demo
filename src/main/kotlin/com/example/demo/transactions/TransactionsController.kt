@@ -6,6 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired
 
 import com.example.demo.model.Transaction
 import com.example.demo.repository.TransactionRepository
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration
+import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+import reactor.core.publisher.Flux
+import reactor.core.publisher.Mono
 
 
 @SpringBootApplication
@@ -13,26 +17,22 @@ import com.example.demo.repository.TransactionRepository
 @RestController("/")
 class TransactionsController (private val transactionsService: TransactionsService){
 
-    @Autowired
-    lateinit var repository: TransactionRepository
+//    @Autowired
+//    lateinit var repository: TransactionRepository
 
     @GetMapping("/transactions")
-    fun getAllTransactions(): MutableList<Transaction> {
+    fun getAllTransactions(): Mono<MutableList<Transaction>> {
         return transactionsService.getAllTransactions();
     }
 
-    @GetMapping("/transactions/{iban}")
-    fun getTransactionsByIban(@PathVariable iban: String): List<Transaction> {
-        return transactionsService.getTransactionsByIBAN(iban)
-    }
 
     @PostMapping(path = ["/transactions"])
-    fun addTransaction(@RequestBody newTransaction: Transaction): Transaction {
+    fun addTransaction(@RequestBody newTransaction: Transaction): Mono<Transaction> {
         return transactionsService.addTransaction(newTransaction);
     }
 
     @GetMapping("/transaction/{id}")
-    fun getTransactionById(@PathVariable id: Int): Transaction {
+    fun getTransactionById(@PathVariable id: Long): Mono<Transaction> {
         return transactionsService.getTransactionById(id)
     }
 

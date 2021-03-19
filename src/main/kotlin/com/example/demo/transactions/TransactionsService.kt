@@ -6,53 +6,35 @@ import com.example.demo.model.*
 import com.example.demo.repository.TransactionRepository
 import org.springframework.beans.factory.annotation.Autowired
 import com.example.demo.model.Transaction
+import org.springframework.context.annotation.Bean
+import reactor.core.publisher.Flux
+import reactor.core.publisher.Mono
 import java.util.*
 
 @Service
-class TransactionsService {
+class TransactionsService (private val repository: TransactionRepository) {
 
-    companion object {
-        fun generateIBAN() = "DE" + floor(Math.random() * 9999999).toInt()
+
+    fun getAllTransactions(): Mono<MutableList<Transaction>> {
+        return repository.findAll().collectList()
     }
 
-    @Autowired
-    lateinit var repository: TransactionRepository
 
-    fun getAllTransactions(): MutableList<Transaction> {
-        var transactions: MutableList<Transaction> = mutableListOf<Transaction>()
-        repository.findAll().forEach {
-            transactions.add(it)
-        }
-        return transactions
-    }
-
-    fun getTransactionsByIBAN(iban: String): List<Transaction> {
-        var allTransactionsByIban = mutableListOf<Transaction>()
-        for (outgoingTransaction in repository.findAllByFromIban(iban)) {
-            allTransactionsByIban.add(outgoingTransaction)
-        }
-        for (incomingTransaction in repository.findAllByToIban(iban)) {
-            allTransactionsByIban.add(incomingTransaction)
-        }
-
-        return allTransactionsByIban
-
-    }
 
     private fun transactionInvalid(newTransaction: Transaction) : Boolean {
         return (newTransaction.type == "transfer" && newTransaction.toIban == null)
     }
 
-    fun addTransaction(newTransaction: Transaction): Transaction {
+    fun addTransaction(newTransaction: Transaction): Mono<Transaction> {
         if (transactionInvalid(newTransaction)) throw TransferToIBANNotFoundException()
         return repository.save(newTransaction)
     }
 
-    fun getTransactionById(id: Int) : Transaction {
-        if (!repository.existsTransactionById(id)) {
+    fun getTransactionById(id: Long) : Mono<Transaction>  {
+        if (repository.existsById(id).equals(false)) {
             throw TransactionNotFoundException()
         }
-        return repository.findTransactionById(id)
+        return repository.findById(id)
     }
 
 }

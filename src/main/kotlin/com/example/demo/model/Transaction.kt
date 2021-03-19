@@ -1,29 +1,29 @@
 package com.example.demo.model
 
-import javax.persistence.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.relational.core.mapping.Column
+import org.springframework.data.relational.core.mapping.Table
 
-@Entity
-@Table(name = "transactions")
+@Table("transactions")
 class Transaction(
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(columnDefinition = "serial")
-    val id: Int? = 1,
+    @Column("id")
+    var id: Long?,
 
-    @Column(name = "from_iban")
+    @Column("from_iban")
     val fromIban: String? = null,
 
-    @Column(name = "to_iban")
+    @Column("to_iban")
     var toIban: String? = null,
 
-    @Column(name = "date")
+    @Column("date")
     val date: String = "",
 
-    @Column(name = "type")
+    @Column("type")
     var type: String = "",
 
-    @Column(name = "amount")
+    @Column("amount")
     var amount: Double = 0.00
 
 )

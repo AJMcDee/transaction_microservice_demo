@@ -1,6 +1,6 @@
-CREATE TABLE transactions
+CREATE TABLE IF NOT EXISTS transactions
 (
-    id SERIAL PRIMARY KEY NOT NULL,
+    id bigserial PRIMARY KEY NOT NULL,
     from_iban varchar(100),
     to_iban varchar(100),
     date varchar(100),
