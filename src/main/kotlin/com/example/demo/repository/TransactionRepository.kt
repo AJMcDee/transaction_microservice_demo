@@ -10,10 +10,6 @@ import reactor.core.publisher.Mono
 @Repository
 public interface TransactionRepository: ReactiveCrudRepository<Transaction, Long> {
 
-    fun findAllByFromIban(iban:String): Mono<MutableList<Transaction>>
-    fun findAllByToIban(iban:String): Mono<MutableList<Transaction>>
-
-    fun findTransactionById(id: Long): Transaction
 
 
 }

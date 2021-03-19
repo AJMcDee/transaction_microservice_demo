@@ -21,7 +21,7 @@ class TransactionsService (private val repository: TransactionRepository) {
 
 
 
-    private fun transactionInvalid(newTransaction: Transaction) : Boolean {
+    fun transactionInvalid(newTransaction: Transaction) : Boolean {
         return (newTransaction.type == "transfer" && newTransaction.toIban == null)
     }
 
@@ -31,10 +31,12 @@ class TransactionsService (private val repository: TransactionRepository) {
     }
 
     fun getTransactionById(id: Long) : Mono<Transaction>  {
-        if (repository.existsById(id).equals(false)) {
+        try {
+            return repository.findById(id)
+        } catch (e: Exception) {
             throw TransactionNotFoundException()
         }
-        return repository.findById(id)
+
     }
 
 }
