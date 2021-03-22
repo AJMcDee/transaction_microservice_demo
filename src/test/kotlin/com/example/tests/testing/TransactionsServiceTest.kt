@@ -16,7 +16,7 @@ import reactor.core.publisher.Mono
 import reactor.test.StepVerifier
 import kotlin.test.assertFailsWith
 
-class MockkServiceTestSuite {
+class TransactionsServiceTest {
 
     val repositoryMock = mockk<TransactionRepository>()
 
@@ -52,7 +52,7 @@ class MockkServiceTestSuite {
     inner class TransactionInvalid {
 
         @Test
-        fun `An invalid transfer should return false`() {
+        fun `An invalid transfer should be flagged as invalid`() {
 
             val result = testService.transactionInvalid(badTransaction1)
             Assertions.assertThat(result).isTrue
@@ -60,7 +60,7 @@ class MockkServiceTestSuite {
         }
 
         @Test
-        fun `An valid transfer should return true`() {
+        fun `An valid transfer should not be flagged as invalid`() {
 
             val result = testService.transactionInvalid(transaction1)
             Assertions.assertThat(result).isFalse
@@ -131,12 +131,13 @@ class MockkServiceTestSuite {
         fun `Invalid ID should throw a transaction not found error`() {
             // setup (expected / Rules)
 
-            every { repositoryMock.existsById(42) } returns Mono.just(false)
+            every { repositoryMock.findById(42) } returns Mono.empty()
 
+            val result = testService.getTransactionById(42)
 
-            assertFailsWith<TransactionNotFoundException> {
-                testService.getTransactionById(42)
-            }
+            StepVerifier.create(result)
+                .expectError(TransactionNotFoundException::class.java)
+                .verify()
         }
 
     }

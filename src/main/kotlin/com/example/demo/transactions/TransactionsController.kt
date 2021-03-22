@@ -33,7 +33,7 @@ class TransactionsController (private val transactionsService: TransactionsServi
 
     @GetMapping("/transaction/{id}")
     fun getTransactionById(@PathVariable id: Long): Mono<Transaction> {
-        return transactionsService.getTransactionById(id)
+            return transactionsService.getTransactionById(id)
     }
 
 }

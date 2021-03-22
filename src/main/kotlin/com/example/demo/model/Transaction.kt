@@ -5,11 +5,11 @@ import org.springframework.data.relational.core.mapping.Column
 import org.springframework.data.relational.core.mapping.Table
 
 @Table("transactions")
-class Transaction(
+data class Transaction(
 
     @Id
     @Column("id")
-    var id: Long?,
+    var id: Long? = null,
 
     @Column("from_iban")
     val fromIban: String? = null,
